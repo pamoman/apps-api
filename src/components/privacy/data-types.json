@@ -1,0 +1,14 @@
+{
+  "collectionName": "components_privacy_data_types",
+  "info": {
+    "displayName": "Data Types",
+    "icon": "chart-bar",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "data": {
+      "type": "string"
+    }
+  }
+}

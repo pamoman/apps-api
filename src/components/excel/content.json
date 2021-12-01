@@ -1,0 +1,26 @@
+{
+  "collectionName": "components_excel_settings",
+  "info": {
+    "displayName": "settings",
+    "icon": "align-left"
+  },
+  "options": {},
+  "attributes": {
+    "nested_prop": {
+      "type": "string",
+      "default": "name"
+    },
+    "separator": {
+      "type": "string",
+      "default": ", "
+    },
+    "bool_true": {
+      "type": "string",
+      "default": "Ja"
+    },
+    "bool_false": {
+      "type": "string",
+      "default": "Nej"
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "kind": "collectionType",
+  "collectionName": "data_types",
+  "info": {
+    "singularName": "data-type",
+    "pluralName": "data-types",
+    "displayName": "Data Type"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "data_category": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::data-category.data-category",
+      "inversedBy": "data_types"
+    }
+  }
+}

@@ -1,0 +1,110 @@
+{
+  "kind": "collectionType",
+  "collectionName": "apps",
+  "info": {
+    "singularName": "app",
+    "pluralName": "apps",
+    "displayName": "App"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "bundle_id": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "jamf_id": {
+      "type": "integer"
+    },
+    "category": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::category.category"
+    },
+    "appstore_id": {
+      "type": "integer"
+    },
+    "appstore_url": {
+      "type": "string"
+    },
+    "description": {
+      "type": "richtext"
+    },
+    "icon": {
+      "type": "string"
+    },
+    "free": {
+      "type": "boolean",
+      "default": true
+    },
+    "price": {
+      "type": "decimal"
+    },
+    "genres": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::genre.genre",
+      "inversedBy": "apps"
+    },
+    "manage_privacy_url": {
+      "type": "string"
+    },
+    "developer_privacy_policy": {
+      "type": "string"
+    },
+    "privacy": {
+      "type": "component",
+      "repeatable": true,
+      "component": "privacy.privacy-types"
+    },
+    "privacy_risks": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::privacy-risk.privacy-risk",
+      "inversedBy": "apps"
+    },
+    "risk_level": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::risk-level.risk-level",
+      "inversedBy": "apps"
+    },
+    "dynamic_risk": {
+      "type": "boolean",
+      "default": true
+    },
+    "devices": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::device.device",
+      "inversedBy": "apps"
+    },
+    "pub": {
+      "type": "boolean",
+      "default": false
+    },
+    "guidelines": {
+      "type": "boolean",
+      "default": false
+    },
+    "guidelines_link": {
+      "type": "string"
+    },
+    "information": {
+      "type": "richtext"
+    },
+    "date_confirmed": {
+      "type": "date"
+    },
+    "date_revised": {
+      "type": "date"
+    }
+  }
+}

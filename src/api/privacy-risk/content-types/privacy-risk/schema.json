@@ -1,0 +1,47 @@
+{
+  "kind": "collectionType",
+  "collectionName": "privacy_risks",
+  "info": {
+    "singularName": "privacy-risk",
+    "pluralName": "privacy-risks",
+    "displayName": "Privacy Risk"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "privacy_type": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::privacy-type.privacy-type",
+      "inversedBy": "privacy_risks"
+    },
+    "data_type": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::data-type.data-type"
+    },
+    "data_purpose": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::data-purpose.data-purpose"
+    },
+    "risk_level": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::risk-level.risk-level",
+      "inversedBy": "privacy_risks"
+    },
+    "apps": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::app.app",
+      "inversedBy": "privacy_risks"
+    }
+  }
+}

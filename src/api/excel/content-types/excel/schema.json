@@ -1,0 +1,20 @@
+{
+  "kind": "singleType",
+  "collectionName": "excels",
+  "info": {
+    "singularName": "excel",
+    "pluralName": "excels",
+    "displayName": "Excel"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "columns": {
+      "type": "component",
+      "repeatable": true,
+      "component": "excel.column"
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "kind": "collectionType",
+  "collectionName": "data_categories",
+  "info": {
+    "singularName": "data-category",
+    "pluralName": "data-categories",
+    "displayName": "Data Category"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "unique": true
+    },
+    "data_types": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::data-type.data-type",
+      "mappedBy": "data_category"
+    }
+  }
+}

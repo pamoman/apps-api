@@ -1,0 +1,22 @@
+{
+  "collectionName": "components_privacy_data_categories",
+  "info": {
+    "displayName": "Data Categories",
+    "icon": "info",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "data_category": {
+      "type": "string"
+    },
+    "identifier": {
+      "type": "string"
+    },
+    "data_types": {
+      "type": "component",
+      "repeatable": true,
+      "component": "privacy.data-types"
+    }
+  }
+}

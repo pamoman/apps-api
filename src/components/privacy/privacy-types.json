@@ -1,0 +1,30 @@
+{
+  "collectionName": "components_privacy_privacy_types",
+  "info": {
+    "displayName": "Privacy Types",
+    "icon": "search-location",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "privacy_type": {
+      "type": "string"
+    },
+    "identifier": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    },
+    "data_categories": {
+      "type": "component",
+      "repeatable": true,
+      "component": "privacy.data-categories"
+    },
+    "purposes": {
+      "type": "component",
+      "repeatable": true,
+      "component": "privacy.purposes"
+    }
+  }
+}

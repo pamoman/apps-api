@@ -1,0 +1,21 @@
+{
+  "collectionName": "components_privacy_purposes",
+  "info": {
+    "displayName": "purposes",
+    "icon": "exclamation-circle"
+  },
+  "options": {},
+  "attributes": {
+    "purpose": {
+      "type": "string"
+    },
+    "identifier": {
+      "type": "string"
+    },
+    "data_categories": {
+      "type": "component",
+      "repeatable": true,
+      "component": "privacy.data-categories"
+    }
+  }
+}

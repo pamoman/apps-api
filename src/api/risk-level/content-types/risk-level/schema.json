@@ -1,0 +1,52 @@
+{
+  "kind": "collectionType",
+  "collectionName": "risk_levels",
+  "info": {
+    "singularName": "risk-level",
+    "pluralName": "risk-levels",
+    "displayName": "Risk level"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "level": {
+      "type": "integer"
+    },
+    "name": {
+      "type": "string"
+    },
+    "color": {
+      "type": "enumeration",
+      "enum": [
+        "Red",
+        "Orange",
+        "Green",
+        "Brown",
+        "Yellow",
+        "Pink",
+        "Purple"
+      ]
+    },
+    "information": {
+      "type": "richtext"
+    },
+    "default": {
+      "type": "boolean",
+      "default": false
+    },
+    "privacy_risks": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::privacy-risk.privacy-risk",
+      "mappedBy": "risk_level"
+    },
+    "apps": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::app.app",
+      "mappedBy": "risk_level"
+    }
+  }
+}
