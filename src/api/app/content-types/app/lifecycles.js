@@ -4,14 +4,14 @@
 
 /* Data relations must be an ID not a string, convert where needed */
 const handleCategory = async (data, name) => {
-    const found = await strapi.services.category.findOne({ name });
+    const found = await strapi.db.query('api::category.category').findOne({ where: { name } });
 
-    let id = 2;
+    let id;
 
     if (found) {
         id = found.id;
     } else {
-        const res = await strapi.services.category.create({ name });
+        const res = await strapi.db.query('api::category.category').create({ data: { name } });
 
         id = res.id;
     }
@@ -24,14 +24,14 @@ const handleGenres = async (data, genres) => {
     const genreIds = [];
 
     for (const name of genres) {
-        const found = await strapi.services.genre.findOne({ name });
+        const found = await await strapi.db.query('api::genre.genre').findOne({ where: { name } });
 
         let id;
 
         if (found) {
             id = found.id;
         } else {
-            const res = await strapi.services.genre.create({ name });
+            const res = await await strapi.db.query('api::genre.genre').create({ data: { name } });
 
             id = res.id;
         }
@@ -69,13 +69,10 @@ const handleData = async (data) => {
 };
 
 module.exports = {
-    async beforeCreate({ params }) {
-        const { data } = params;
-
-        console.log(data);
-        /* await handleData(data); */
+    async beforeCreate({ params: { data } }) {
+        await handleData(data);
     },
-    async beforeUpdate(params, data) {
-       /*  await handleData(data); */
+    async beforeUpdate({ params: { data } }) {
+        await handleData(data);
     }
 };
