@@ -1,0 +1,24 @@
+{
+  "name": "app-collector",
+  "version": "0.0.1",
+  "description": "Collect apps from Jamf and scrape data using the Apple App Store.",
+  "strapi": {
+    "name": "App Collector",
+    "description": "Collect apps from Jamf and scrape data using the Apple App Store.",
+    "kind": "plugin"
+  },
+  "dependencies": {},
+  "author": {
+    "name": "Pamosystems"
+  },
+  "maintainers": [
+    {
+      "name": "Pamosystems"
+    }
+  ],
+  "engines": {
+    "node": ">=12.x. <=16.x.x",
+    "npm": ">=6.0.0"
+  },
+  "license": "MIT"
+}
