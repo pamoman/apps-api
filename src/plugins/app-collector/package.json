@@ -7,7 +7,10 @@
     "description": "Collect apps from Jamf and scrape data using the Apple App Store.",
     "kind": "plugin"
   },
-  "dependencies": {},
+  "dependencies": {
+    "app-store-scraper": "^0.17.0",
+    "puppeteer": "^10.4.0"
+  },
   "author": {
     "name": "Pamosystems"
   },

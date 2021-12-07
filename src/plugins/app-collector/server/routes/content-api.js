@@ -13,8 +13,8 @@ module.exports = {
       },
       {
         method: 'GET',
-        path: '/collect',
-        handler: 'apps.doSomething',
+        path: '/collect/:domain/:type',
+        handler: 'apps.collect',
         config: {
           policies: [],
         },
