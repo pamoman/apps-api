@@ -4,10 +4,11 @@
   "info": {
     "singularName": "data-purpose",
     "pluralName": "data-purposes",
-    "displayName": "Data Purpose"
+    "displayName": "Data Purpose",
+    "description": ""
   },
   "options": {
-    "draftAndPublish": true
+    "draftAndPublish": false
   },
   "pluginOptions": {},
   "attributes": {

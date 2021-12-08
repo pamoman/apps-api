@@ -4,10 +4,11 @@
   "info": {
     "singularName": "privacy-type",
     "pluralName": "privacy-types",
-    "displayName": "Privacy Type"
+    "displayName": "Privacy Type",
+    "description": ""
   },
   "options": {
-    "draftAndPublish": true
+    "draftAndPublish": false
   },
   "pluginOptions": {},
   "attributes": {

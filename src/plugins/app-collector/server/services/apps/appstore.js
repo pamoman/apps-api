@@ -8,7 +8,7 @@ const puppeteer = require('puppeteer');
 /*
  * Global Variables
  */
-let riskAssessments = [];
+let privacyRisks = [];
 
 /*
  * Convert Privacy type name to shortname
@@ -37,7 +37,7 @@ const getSupportedDevices = async (supportedDevices) => {
     supportedDevices.findIndex(element => element.includes("TV") && devices.push("Apple TV"));
 
     const deviceFields = await forEach(devices, async device => {
-        const res = await strapi.query("device").findOne({ name: device })
+        const res = await strapi.db.query('api::device.device').findOne({ where: { name: device } })
         const { id } = res || {};
 
         return id;
@@ -62,9 +62,9 @@ const forEach = async (data, callback) => {
  */
 const insertPrivacyType = async (name) => {
     try {
-        await strapi.services["privacy-type"].createOrUpdate({ name });
+        await strapi.service('api::privacy-type.privacy-type').createIfNotExists({ name });
     } catch (e) {
-        strapi.log.fatal(e.message);
+        strapi.log.error(e.message);
     }
 };
 
@@ -73,9 +73,9 @@ const insertPrivacyType = async (name) => {
  */
 const insertPurpose = async (name) => {
     try {
-        await strapi.services["data-purpose"].createOrUpdate({ name });
+        await strapi.service('api::data-purpose.data-purpose').createIfNotExists({ name });
     } catch (e) {
-        strapi.log.fatal(e.message);
+        strapi.log.error(e.message);
     }
 };
 
@@ -84,34 +84,33 @@ const insertPurpose = async (name) => {
  */
 const insertDataType = async (dataType, category) => {
     try {
-        const { id } = await strapi.services["data-category"].createOrUpdate({ name: category });
+        const { id } = await strapi.service('api::data-category.data-category').createIfNotExists({ name: category });
 
         category = id;
-            
-        await strapi.services["data-type"].createOrUpdate({ name: dataType, data_category: category });
+        await strapi.service('api::data-type.data-type').createIfNotExists({ name: dataType, data_category: category });
     } catch (e) {
-        strapi.log.fatal(e.message);
+        strapi.log.error(e.message);
     }
 };
 
 /*
  * Insert risk assessment into database
  */
-const insertRiskAssessment = async (type, purpose, data) => {
+const insertPrivacyRisk = async (type, purpose, data) => {
     try {
         const shortName = getPrivacyTypeShortName(type);
         const name = `${shortName}: ${data} for ${purpose}`;
 
-        let res = await strapi.query("risk-assessment").findOne({ name });
+        let res = await strapi.db.query('api::privacy-risk.privacy-risk').findOne({ where: { name } });
 
         if (!res) {
 
-            const privacyType = await strapi.query("privacy-type").findOne({ name: type });
-            const dataPurpose = purpose ? await strapi.query("data-purpose").findOne({ name: purpose }) : null;
-            const dataType = await strapi.query("data-type").findOne({ name: data });
-            const riskLevel = await strapi.query("risk-level").findOne({ default: true });
+            const privacyType = await strapi.db.query('api::privacy-type.privacy-type').findOne({ where: { name: type } });
+            const dataPurpose = purpose ? await strapi.db.query('api::data-purpose.data-purpose').findOne({ where: { name: purpose } }) : null;
+            const dataType = await strapi.db.query('api::data-type.data-type').findOne({ where: { name: data } });
+            const riskLevel = await strapi.db.query('api::risk-level.risk-level').findOne({ where: { default: true } });
 
-            const riskAssessment = {
+            const privacyRisk = {
                 name,
                 privacy_type: privacyType?.id,
                 data_purpose: dataPurpose?.id,
@@ -119,14 +118,14 @@ const insertRiskAssessment = async (type, purpose, data) => {
                 risk_level: riskLevel?.id
             };
 
-            res = await strapi.query("risk-assessment").create(riskAssessment) || {};
+            res = await strapi.db.query('api::privacy-risk.privacy-risk').create({ data: privacyRisk }) || {};
         }
 
         const { id } = res || {};
 
-        riskAssessments.push(id);
+        privacyRisks.push(id);
     } catch (e) {
-        strapi.log.fatal(e.message);
+        strapi.log.error(e.message);
     }
 };
 
@@ -141,7 +140,7 @@ const handlePrivacyData = async (dataCategories, privacyType, purpose = "Functio
 
         const data_types = await forEach(dataTypes, async data => {
             await insertDataType(data, dataCategory);
-            await insertRiskAssessment(privacyType, purpose, data);
+            await insertPrivacyRisk(privacyType, purpose, data);
     
             return { data };
         });
@@ -191,8 +190,8 @@ const getAppStoreAppFields = async (data) => {
 const getAppStorePrivacyFields = async (data) => {
     const { managePrivacyChoicesUrl, privacyTypes = [] } = data;
 
-    // Reset Risk Assessments arrays
-    riskAssessments = [];
+    // Reset Privacy Risks array
+    privacyRisks = [];
 
     const privacy = await forEach(privacyTypes, async type => {
         let {
@@ -231,7 +230,7 @@ const getAppStorePrivacyFields = async (data) => {
     return {
         privacy,
         manage_privacy_url: managePrivacyChoicesUrl,
-        risk_assessments: riskAssessments
+        privacy_risk: privacyRisks
     };
 };
 
