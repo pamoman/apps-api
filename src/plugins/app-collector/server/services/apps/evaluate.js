@@ -29,7 +29,7 @@ const handleRiskLevel = async (riskAssessments, riskLevels, data) => {
 
 /* Update the dates when changing risk levels */
 const handleRiskDates = async (level, dateConfirmed, data) => {
-    const { helper } = strapi.config.functions.apps;
+    const { utils } = strapi.service('plugin::app-collector.helper');
 
     switch (true) {
         case level === 0:
@@ -37,10 +37,10 @@ const handleRiskDates = async (level, dateConfirmed, data) => {
             data.date_revised = null;
             break;
         case (level > 0 && dateConfirmed === null):
-            data.date_confirmed = helper.formatMyDate(new Date());
+            data.date_confirmed = utils.formatMyDate(new Date());
             break;
         case (level > 0 && dateConfirmed != null):
-            data.date_revised = helper.formatMyDate(new Date());
+            data.date_revised = utils.formatMyDate(new Date());
             break;
         default:
             break;
@@ -49,24 +49,27 @@ const handleRiskDates = async (level, dateConfirmed, data) => {
 
 /* Evaluate all app risk levels */
 const evaluateAppRisk = async (domain) => {
-    const apps = await strapi.query("app").find({ _limit: -1 }, ["risk_assessments", "risk_assessments.risk_level"]);
-    const riskLevels = await strapi.query("risk-level").find();
+    const apps = await strapi.entityService.findMany('api::app.app', {
+        populate: ['privacy_risks', 'privacy_risks.risk_level']
+    });
+
+    const riskLevels = await strapi.db.query('api::risk-level.risk-level').findMany({ _limit: -1 });
 
     let count = 0;
 
     for (const app of apps) {
-        const { id, title, dynamic_risk, risk_assessments, date_confirmed } = app;
+        const { id, title, dynamic_risk, privacy_risks, date_confirmed } = app;
 
         if (dynamic_risk) {
             strapi.log.info(`Evaluating risk level for ${domain} app: ${title}`);
 
             const data = {};
 
-            const { level } = await handleRiskLevel(risk_assessments, riskLevels, data);
+            const { level } = await handleRiskLevel(privacy_risks, riskLevels, data);
 
             handleRiskDates(level, date_confirmed, data);
 
-            await strapi.query("app").update({ id }, data);
+            await strapi.db.query('api::app.app').update({ where: { id }, data });
 
             count++;
         }
@@ -76,7 +79,7 @@ const evaluateAppRisk = async (domain) => {
 };
 
 module.exports = {
-    appData: async (params) => {
+    evaluateApps: async ({ params }) => {
         const { domain, type } = params;
         const allowed = ["bos", "dlg"];
 
@@ -86,13 +89,13 @@ module.exports = {
                     strapi.log.info(`Risk evaluating ${domain} Apps...`);
     
                     return await evaluateAppRisk(domain);
+                default:
+                    break;
             }
-            
-            
-            return await evaluateAppRisk();
-            
         } else {
-            strapi.log.fatal("Invalid domain name.")
+            strapi.log.fatal("Invalid domain name.");
         }
+
+        return { action: "invalid" };
     }
 }

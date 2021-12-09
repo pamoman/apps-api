@@ -11,5 +11,21 @@ module.exports = {
         policies: [],
       },
     },
+    {
+      method: 'GET',
+      path: '/evaluate/:domain/:type',
+      handler: 'apps.evaluate',
+      config: {
+        policies: [],
+      },
+    },
+    {
+      method: 'GET',
+      path: '/export/:domain/:type',
+      handler: 'apps.export',
+      config: {
+        policies: [],
+      },
+    },
   ],
 };

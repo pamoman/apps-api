@@ -9,7 +9,8 @@
   },
   "dependencies": {
     "app-store-scraper": "^0.17.0",
-    "puppeteer": "^10.4.0"
+    "puppeteer": "^10.4.0",
+    "exceljs": "^4.3.0"
   },
   "author": {
     "name": "Pamosystems"

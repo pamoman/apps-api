@@ -5,12 +5,12 @@
 const ExcelJS = require('exceljs');
 
 const getContents = (column = {}, app = {}) => {
-    const { helper } = strapi.config.functions.apps;
+    const { utils } = strapi.service('plugin::app-collector.helper');
     const { key, settings } = column;
     const { separator = ", ", nested_prop = "name", bool_true = "Yes", bool_false = "No" } = settings || {};
     const appVal = app[key];
 
-    const { isUndefined, isNull, isArray, isNested, isBool, isURL } = helper.getTypeOf(appVal);
+    const { isUndefined, isNull, isArray, isNested, isBool, isURL } = utils.getTypeOf(appVal);
 
     let val;
 
@@ -63,7 +63,9 @@ const getTypeRow = (columns) => {
 };
 
 const getAppRows = async (columns) => {
-    const apps = await strapi.query("app").find({ _limit: -1 });
+    const apps = await strapi.entityService.findMany('api::app.app', {
+        populate: ['privacy_risks', 'privacy_risks.risk_level']
+    });
 
     const appRows = apps.map(app => {
         const fields = {};
@@ -102,7 +104,9 @@ const toExcel = async (domain) => {
     const workbook = new ExcelJS.Workbook();
     const sheet = workbook.addWorksheet(domain);
 
-    const { columns } = await strapi.query("excel").findOne() || {};
+    const { columns } = await strapi.db.query('api::excel.excel').findOne({
+        populate: { columns: true }
+    });
 
     sheet.columns = columns.map(column => {
         const { header, key, width } = column;
@@ -127,14 +131,11 @@ const toExcel = async (domain) => {
 
     strapi.log.info(`Excel file saved to: ${filename}`);
 
-    return `
-        <h1>Ladda ned ${domain.toUpperCase()} apps excel filen nedan</h1>
-        <a href='/apps/${domain}/excel/apps.xlsx'>Download</a>
-    `;
+    return { download: `https://apps-api.lidkoping.school/apps/${domain}/excel/apps.xlsx`};
 };
 
 module.exports = {
-    appData: async (params) => {
+    exportApps: async ({ params }) => {
         const { domain, type } = params;
         const allowed = ["bos", "dlg"];
 
@@ -146,7 +147,7 @@ module.exports = {
                     return await toExcel(domain);
             }
         } else {
-            strapi.log.fatal("Invalid domain name.")
+            strapi.log.error("Invalid domain name.")
         }
     }
 };

@@ -1,7 +1,9 @@
 'use strict';
 
-const appCollector = require('./apps');
+const apps = require('./apps');
+const helper = require('./helper');
 
 module.exports = {
-    appCollector,
+    apps,
+    helper
 };

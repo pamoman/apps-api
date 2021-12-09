@@ -230,7 +230,7 @@ const getAppStorePrivacyFields = async (data) => {
     return {
         privacy,
         manage_privacy_url: managePrivacyChoicesUrl,
-        privacy_risk: privacyRisks
+        privacy_risks: privacyRisks
     };
 };
 
